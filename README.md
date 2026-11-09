@@ -1,10 +1,10 @@
-# gmail-unread-older_than-deleter
+# GUOD - Gmail Unread Older_than Deleter
 
 [Clicca qui per il README In italiano](README.it.md)
 
 Chrome extension that, on an already open Gmail search, selects the visible page, moves it to Trash, waits, and repeats. Messages stay in Trash for 30 days. Fast mode waits 5 seconds. Slow mode waits a random 10 to 15 seconds, and also pauses 0 to 3 seconds before selecting the page, which is easier on Gmail when it starts returning errors.
 
-The panel, the name, and the messages follow the browser language: Italian when the browser is in Italian, English otherwise. Gmail's own buttons are looked up in both Italian and English.
+The panel and the messages follow the browser language: Italian when the browser is in Italian, English otherwise. The name stays **GUOD** in both. When the panel is collapsed, the button says **GUOD**. Gmail's own buttons are looked up in both Italian and English.
 
 ## Search requirements
 
@@ -37,7 +37,7 @@ It will not start if the search contains any of these operators: `in:trash`, `in
 1. Open `chrome://extensions`.
 2. Turn on **Developer mode**.
 3. Click **Load unpacked** and choose this folder.
-4. Reload Gmail. The panel appears at the bottom right.
+4. Reload Gmail. The GUOD panel appears at the bottom right.
 5. Open a search that meets the requirements above and press **Start**.
 
 Chrome warns that the extension can read and change data on `mail.google.com`: that is the permission the script needs to run inside Gmail. After a code change, click **Reload** on the extension in `chrome://extensions` and refresh the Gmail tab.

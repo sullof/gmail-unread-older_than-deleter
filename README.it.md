@@ -1,10 +1,10 @@
-# gmail-unread-older_than-deleter
+# GUOD - Gmail Unread Older_than Deleter
 
 [English README](README.md)
 
 Estensione per Chrome che, sulla ricerca Gmail già aperta, seleziona la pagina visibile, la sposta nel Cestino, aspetta e ripete. I messaggi restano nel Cestino per 30 giorni. La modalità veloce aspetta 5 secondi. La modalità lenta aspetta un tempo casuale fra 10 e 15 secondi, e prima di selezionare la pagina aspetta fra 0 e 3 secondi. È più gentile con Gmail quando inizia a rispondere con errori.
 
-Il pannello, il nome e i messaggi seguono la lingua del browser: italiano se il browser è in italiano, inglese negli altri casi. I pulsanti di Gmail vengono cercati sia in italiano sia in inglese.
+Il pannello e i messaggi seguono la lingua del browser: italiano se il browser è in italiano, inglese negli altri casi. Il nome resta **GUOD** in entrambe. Quando il pannello è ridotto, il pulsante dice **GUOD**. I pulsanti di Gmail vengono cercati sia in italiano sia in inglese.
 
 ## Requisiti della ricerca
 
@@ -37,7 +37,7 @@ Non parte se nella ricerca compare uno di questi operatori: `in:trash`, `in:spam
 1. Apri `chrome://extensions`.
 2. Attiva la **modalità sviluppatore**.
 3. Clicca **Carica estensione non pacchettizzata** e scegli questa cartella.
-4. Ricarica Gmail. Il pannello compare in basso a destra.
+4. Ricarica Gmail. Il pannello GUOD compare in basso a destra.
 5. Apri una ricerca che rispetta i requisiti sopra e premi **Avvia**.
 
 Chrome avvisa che l'estensione può leggere e modificare i dati su `mail.google.com`: è il permesso con cui lo script gira dentro Gmail. Dopo una modifica al codice, in `chrome://extensions` premi **Ricarica** sull'estensione e aggiorna la scheda di Gmail.

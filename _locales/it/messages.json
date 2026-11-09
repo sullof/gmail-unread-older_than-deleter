@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Gmail cestino non lette"
+    "message": "GUOD - Gmail Unread Older_than Deleter"
   },
   "extDescription": {
     "message": "Sulla ricerca Gmail aperta, seleziona la pagina visibile e la sposta nel Cestino, poi ripete."
@@ -112,17 +112,39 @@
       }
     }
   },
-  "waitingFive": {
-    "message": "Attendo 5 secondi…"
+  "waiting": {
+    "message": "Attendo $SECONDS$ secondi…",
+    "placeholders": {
+      "seconds": {
+        "content": "$1"
+      }
+    }
+  },
+  "paceFast": {
+    "message": "Veloce · 5 s"
+  },
+  "paceSlow": {
+    "message": "Lento · 10–15 s"
+  },
+  "hesitating": {
+    "message": "Attendo $SECONDS$ secondi prima di selezionare…",
+    "placeholders": {
+      "seconds": {
+        "content": "$1"
+      }
+    }
   },
   "listUnchanged": {
     "message": "La lista non è cambiata: Gmail potrebbe aver ignorato il clic."
   },
   "confirm": {
-    "message": "Sposto nel Cestino una pagina di questa ricerca ogni 5 secondi.\n\n$QUERY$\n\nI messaggi restano nel Cestino per 30 giorni. Puoi premere Stop quando vuoi.",
+    "message": "Sposto nel Cestino una pagina di questa ricerca ogni $SECONDS$ secondi.\n\n$QUERY$\n\nI messaggi restano nel Cestino per 30 giorni. Puoi premere Stop quando vuoi.",
     "placeholders": {
-      "query": {
+      "seconds": {
         "content": "$1"
+      },
+      "query": {
+        "content": "$2"
       }
     }
   },
@@ -144,7 +166,7 @@
     }
   },
   "pillRunning": {
-    "message": "Cestino · $COUNT$",
+    "message": "GUOD · $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -152,10 +174,10 @@
     }
   },
   "pillIdle": {
-    "message": "Cestino"
+    "message": "GUOD"
   },
   "title": {
-    "message": "Cestino non lette"
+    "message": "GUOD"
   },
   "hide": {
     "message": "Nascondi"
@@ -167,9 +189,21 @@
     "message": "Stop"
   },
   "note": {
-    "message": "Una pagina alla volta, poi 5 secondi. Va nel Cestino, non viene cancellata per sempre. Tieni questa scheda visibile."
+    "message": "Una pagina alla volta, poi la pausa scelta. Va nel Cestino, non viene cancellata per sempre. Tieni questa scheda visibile."
   },
   "ready": {
     "message": "Pronto. Premi Avvia: ogni ciclo seleziona la pagina e la sposta nel Cestino."
+  },
+  "minLabel": {
+    "message": "Minimo da incollare nella ricerca"
+  },
+  "copy": {
+    "message": "Copia"
+  },
+  "copied": {
+    "message": "Copiato"
+  },
+  "copyManual": {
+    "message": "Selezionato"
   }
 }

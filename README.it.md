@@ -2,7 +2,7 @@
 
 [English README](README.md)
 
-Estensione per Chrome che, sulla ricerca Gmail già aperta, seleziona la pagina visibile, la sposta nel Cestino, aspetta cinque secondi e ripete. I messaggi restano nel Cestino per 30 giorni.
+Estensione per Chrome che, sulla ricerca Gmail già aperta, seleziona la pagina visibile, la sposta nel Cestino, aspetta e ripete. I messaggi restano nel Cestino per 30 giorni. La modalità veloce aspetta 5 secondi. La modalità lenta aspetta un tempo casuale fra 10 e 15 secondi, e prima di selezionare la pagina aspetta fra 0 e 3 secondi. È più gentile con Gmail quando inizia a rispondere con errori.
 
 Il pannello, il nome e i messaggi seguono la lingua del browser: italiano se il browser è in italiano, inglese negli altri casi. I pulsanti di Gmail vengono cercati sia in italiano sia in inglese.
 
@@ -25,7 +25,7 @@ Non parte se nella ricerca compare uno di questi operatori: `in:trash`, `in:spam
 ## Limiti
 
 - Agisce solo su `https://mail.google.com/`.
-- Ogni ciclo prende solo la pagina visibile, circa 50 righe, poi attende 5 secondi.
+- Ogni ciclo prende solo la pagina visibile, circa 50 righe, poi attende 5 secondi in modalità veloce. In modalità lenta la pausa è casuale fra 10 e 15 secondi, e la selezione della pagina aspetta fra 0 e 3 secondi.
 - Riconosce il cestino dal nome **Delete** o **Elimina**, non dalla posizione dell'icona.
 - Si ferma da solo quando l'elenco resta vuoto. Il pannello dice **Finito. Nessuna riga rimasta.** In inglese: **Done. No rows left.**
 - Se un clic non ha effetto, riprova fino a tre volte e poi si ferma.

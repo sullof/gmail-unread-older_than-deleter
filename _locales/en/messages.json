@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Gmail unread trash"
+    "message": "GUOD - Gmail Unread Older_than Deleter"
   },
   "extDescription": {
     "message": "On the open Gmail search, selects the visible page, moves it to Trash, then repeats."
@@ -112,17 +112,39 @@
       }
     }
   },
-  "waitingFive": {
-    "message": "Waiting 5 seconds…"
+  "waiting": {
+    "message": "Waiting $SECONDS$ seconds…",
+    "placeholders": {
+      "seconds": {
+        "content": "$1"
+      }
+    }
+  },
+  "paceFast": {
+    "message": "Fast · 5 s"
+  },
+  "paceSlow": {
+    "message": "Slow · 10–15 s"
+  },
+  "hesitating": {
+    "message": "Waiting $SECONDS$ seconds before selecting…",
+    "placeholders": {
+      "seconds": {
+        "content": "$1"
+      }
+    }
   },
   "listUnchanged": {
     "message": "The list did not change: Gmail may have ignored the click."
   },
   "confirm": {
-    "message": "Moving one page of this search to Trash every 5 seconds.\n\n$QUERY$\n\nMessages stay in Trash for 30 days. You can press Stop whenever you want.",
+    "message": "Moving one page of this search to Trash every $SECONDS$ seconds.\n\n$QUERY$\n\nMessages stay in Trash for 30 days. You can press Stop whenever you want.",
     "placeholders": {
-      "query": {
+      "seconds": {
         "content": "$1"
+      },
+      "query": {
+        "content": "$2"
       }
     }
   },
@@ -144,7 +166,7 @@
     }
   },
   "pillRunning": {
-    "message": "Trash · $COUNT$",
+    "message": "GUOD · $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -152,10 +174,10 @@
     }
   },
   "pillIdle": {
-    "message": "Trash"
+    "message": "GUOD"
   },
   "title": {
-    "message": "Unread trash"
+    "message": "GUOD"
   },
   "hide": {
     "message": "Hide"
@@ -167,9 +189,21 @@
     "message": "Stop"
   },
   "note": {
-    "message": "One page at a time, then 5 seconds. Mail goes to Trash and is not deleted forever. Keep this tab visible."
+    "message": "One page at a time, then the pause you picked. Mail goes to Trash and is not deleted forever. Keep this tab visible."
   },
   "ready": {
     "message": "Ready. Press Start: each cycle selects the page and moves it to Trash."
+  },
+  "minLabel": {
+    "message": "Minimum to paste into search"
+  },
+  "copy": {
+    "message": "Copy"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "copyManual": {
+    "message": "Selected"
   }
 }

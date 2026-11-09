@@ -11,7 +11,8 @@
     return message || key;
   }
 
-  const PAUSE_MS = 5000;
+  const FAST_PAUSE_MS = 5000;
+  const MIN_QUERY = "is:unread older_than:90d";
   const MAX_MISSES = 3;
   const BLOCKED_TOKENS = [
     "in:trash",
@@ -32,7 +33,26 @@
     batches: 0,
     rows: 0,
     misses: 0,
+    pace: "fast",
   };
+
+  function randomInt(min, max) {
+    return min + Math.floor(Math.random() * (max - min + 1));
+  }
+
+  function pauseMs() {
+    if (state.pace === "slow") return randomInt(10, 15) * 1000;
+    return FAST_PAUSE_MS;
+  }
+
+  function selectionDelayMs() {
+    if (state.pace !== "slow") return 0;
+    return randomInt(0, 3) * 1000;
+  }
+
+  function pauseLabel() {
+    return state.pace === "slow" ? "10–15" : "5";
+  }
 
   let generation = 0;
   const ui = {};
@@ -395,14 +415,23 @@
       }
       emptyPasses = 0;
 
-      const before = signature(rows);
-      state.status = t("selectingRows", [String(rows.length)]);
+      const hesitate = selectionDelayMs();
+      if (hesitate > 0) {
+        state.status = t("hesitating", [String(hesitate / 1000)]);
+        render();
+        await sleep(hesitate, gen);
+        if (!alive(gen)) return;
+      }
+      const currentRows = findRows();
+      if (!currentRows.length) continue;
+      const before = signature(currentRows);
+      state.status = t("selectingRows", [String(currentRows.length)]);
       render();
       const selected = await selectPage(gen);
       if (!alive(gen)) return;
       if (!selected) {
         if (!miss(gen, "cannotSelect")) return;
-        await sleep(PAUSE_MS, gen);
+        await sleep(pauseMs(), gen);
         continue;
       }
 
@@ -417,7 +446,7 @@
       const selectedNow = countCheckedRows();
       if (!trash || selectedNow === 0) {
         if (!miss(gen, "noDeleteButton")) return;
-        await sleep(PAUSE_MS, gen);
+        await sleep(pauseMs(), gen);
         continue;
       }
 
@@ -427,9 +456,10 @@
       realClick(trash);
       state.batches += 1;
       state.rows += selectedNow;
-      state.status = t("waitingFive");
+      const pause = pauseMs();
+      state.status = t("waiting", [String(pause / 1000)]);
       render();
-      await sleep(PAUSE_MS, gen);
+      await sleep(pause, gen);
       if (!alive(gen)) return;
 
       const outcome = await settle(before, gen);
@@ -454,7 +484,7 @@
       render();
       return;
     }
-    const accepted = confirm(t("confirm", [state.query]));
+    const accepted = confirm(t("confirm", [pauseLabel(), state.query]));
     if (!accepted) return;
 
     state.running = true;
@@ -468,6 +498,24 @@
     void loop(gen);
   }
 
+  function copyMinimum() {
+    const text = ui.minQuery.value;
+    ui.minQuery.focus();
+    ui.minQuery.select();
+    navigator.clipboard.writeText(text).then(
+      () => {
+        ui.copy.textContent = t("copied");
+      },
+      () => {
+        ui.copy.textContent = t("copyManual");
+      },
+    );
+    clearTimeout(ui.copyTimer);
+    ui.copyTimer = setTimeout(() => {
+      ui.copy.textContent = t("copy");
+    }, 1500);
+  }
+
   function onStop() {
     if (!state.running) return;
     finish(t("stoppedManual"));
@@ -478,6 +526,7 @@
     const reason = blockReason();
     const safe = reason === "";
     state.query = queryFromHash();
+    ui.host.classList.toggle("collapsed", state.collapsed);
     ui.panel.hidden = state.collapsed;
     ui.pill.hidden = !state.collapsed;
     ui.query.textContent = state.query || "—";
@@ -485,6 +534,10 @@
     ui.counts.textContent = t("counts", [String(state.batches), String(state.rows)]);
     ui.start.disabled = state.running || !safe;
     ui.stop.disabled = !state.running;
+    ui.paceFast.disabled = state.running;
+    ui.paceSlow.disabled = state.running;
+    ui.paceFast.setAttribute("aria-pressed", state.pace === "fast" ? "true" : "false");
+    ui.paceSlow.setAttribute("aria-pressed", state.pace === "slow" ? "true" : "false");
     ui.pill.textContent = state.running ? t("pillRunning", [String(state.rows)]) : t("pillIdle");
   }
 
@@ -493,23 +546,32 @@
     const host = document.createElement("div");
     host.id = "gmail-cestino-host";
     host.style.setProperty("position", "fixed", "important");
-    host.style.setProperty("right", "16px", "important");
-    host.style.setProperty("bottom", "16px", "important");
+    host.style.setProperty("right", "28px", "important");
+    host.style.setProperty("bottom", "28px", "important");
     host.style.setProperty("z-index", "2147483647", "important");
     host.style.setProperty("width", "auto", "important");
-    host.style.setProperty("pointer-events", "none", "important");
-    for (const type of ["mousedown", "mouseup", "click", "pointerdown", "pointerup"]) {
+    host.style.setProperty("pointer-events", "auto", "important");
+    host.addEventListener("pointerdown", (event) => {
+      if (!state.collapsed) return;
+      state.collapsed = false;
+      render();
+      event.preventDefault();
+      event.stopPropagation();
+    }, true);
+    for (const type of ["pointerdown", "mousedown", "mouseup", "click"]) {
       host.addEventListener(type, (event) => event.stopPropagation());
     }
 
     const shadow = host.attachShadow({ mode: "open" });
     shadow.innerHTML = `
       <style>
+        :host(.collapsed) .panel { display: none !important; }
+        :host(.collapsed) .pill { display: inline-flex !important; }
+        :host(:not(.collapsed)) .pill { display: none !important; }
         * { box-sizing: border-box; }
         button, div { font: 13px/1.4 ui-sans-serif, system-ui, sans-serif; }
         .panel {
           width: 300px;
-          pointer-events: auto;
           background: #fff;
           color: #202124;
           border: 1px solid #dadce0;
@@ -531,8 +593,45 @@
           font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
           font-size: 12px;
         }
+        .min-label { margin: 8px 0 4px; color: #5f6368; font-size: 12px; }
+        .min-row { display: flex; gap: 6px; }
+        .min-row input {
+          flex: 1;
+          min-width: 0;
+          border: 1px solid #dadce0;
+          border-radius: 8px;
+          background: #f1f3f4;
+          color: #202124;
+          padding: 6px 8px;
+          font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+        .min-row button {
+          border: 0;
+          border-radius: 8px;
+          background: #e8f0fe;
+          color: #174ea6;
+          padding: 6px 8px;
+          cursor: pointer;
+          white-space: nowrap;
+        }
         .status { margin-top: 8px; min-height: 2.8em; }
         .counts { color: #5f6368; }
+        .pace { display: flex; gap: 8px; margin-top: 10px; }
+        .pace button {
+          flex: 1;
+          border: 1px solid #dadce0;
+          background: #fff;
+          color: #202124;
+          border-radius: 8px;
+          padding: 6px 8px;
+          cursor: pointer;
+        }
+        .pace button[aria-pressed="true"] {
+          background: #e8f0fe;
+          border-color: #1a73e8;
+          color: #174ea6;
+        }
+        .pace button:disabled { opacity: 0.45; cursor: default; }
         .actions { display: flex; gap: 8px; margin-top: 10px; }
         .actions button {
           flex: 1;
@@ -546,13 +645,16 @@
         .stop { background: #fce8e6; color: #c5221f; }
         .note { margin: 8px 0 0; color: #5f6368; font-size: 12px; }
         .pill {
-          pointer-events: auto;
           border: 0;
           border-radius: 999px;
           background: #1a73e8;
           color: #fff;
-          padding: 8px 12px;
+          min-width: 72px;
+          min-height: 40px;
+          padding: 8px 14px;
           cursor: pointer;
+          align-items: center;
+          justify-content: center;
           box-shadow: 0 6px 18px rgba(26, 115, 232, 0.28);
         }
       </style>
@@ -561,9 +663,18 @@
           <h2 id="title"></h2>
           <button class="link" id="hide" type="button"></button>
         </div>
+        <p class="min-label" id="min-label"></p>
+        <div class="min-row">
+          <input id="min-query" readonly>
+          <button type="button" id="copy"></button>
+        </div>
         <div class="query" id="query"></div>
         <div class="status" id="status"></div>
         <div class="counts" id="counts"></div>
+        <div class="pace">
+          <button type="button" id="pace-fast"></button>
+          <button type="button" id="pace-slow"></button>
+        </div>
         <div class="actions">
           <button class="start" id="start" type="button"></button>
           <button class="stop" id="stop" type="button"></button>
@@ -574,6 +685,7 @@
     `;
     document.documentElement.appendChild(host);
 
+    ui.host = host;
     ui.panel = shadow.getElementById("panel");
     ui.pill = shadow.getElementById("pill");
     ui.query = shadow.getElementById("query");
@@ -581,21 +693,45 @@
     ui.counts = shadow.getElementById("counts");
     ui.start = shadow.getElementById("start");
     ui.stop = shadow.getElementById("stop");
+    ui.paceFast = shadow.getElementById("pace-fast");
+    ui.paceSlow = shadow.getElementById("pace-slow");
     shadow.getElementById("title").textContent = t("title");
     shadow.getElementById("hide").textContent = t("hide");
     shadow.getElementById("note").textContent = t("note");
     ui.start.textContent = t("start");
     ui.stop.textContent = t("stop");
+    ui.paceFast.textContent = t("paceFast");
+    ui.paceSlow.textContent = t("paceSlow");
+    ui.minQuery = shadow.getElementById("min-query");
+    ui.copy = shadow.getElementById("copy");
+    shadow.getElementById("min-label").textContent = t("minLabel");
+    ui.minQuery.value = MIN_QUERY;
+    ui.copy.textContent = t("copy");
+    ui.copy.addEventListener("click", copyMinimum);
+    ui.paceFast.addEventListener("click", () => {
+      if (state.running) return;
+      state.pace = "fast";
+      render();
+    });
+    ui.paceSlow.addEventListener("click", () => {
+      if (state.running) return;
+      state.pace = "slow";
+      render();
+    });
     shadow.getElementById("start").addEventListener("click", onStart);
     shadow.getElementById("stop").addEventListener("click", onStop);
     shadow.getElementById("hide").addEventListener("click", () => {
       state.collapsed = true;
       render();
     });
-    shadow.getElementById("pill").addEventListener("click", () => {
+    const openPanel = (event) => {
       state.collapsed = false;
       render();
-    });
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    ui.pill.addEventListener("pointerdown", openPanel);
+    ui.pill.addEventListener("click", openPanel);
     render();
   }
 

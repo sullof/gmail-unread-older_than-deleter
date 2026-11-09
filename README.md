@@ -2,7 +2,7 @@
 
 [Clicca qui per il README In italiano](README.it.md)
 
-Chrome extension that, on an already open Gmail search, selects the visible page, moves it to Trash, waits five seconds, and repeats. Messages stay in Trash for 30 days.
+Chrome extension that, on an already open Gmail search, selects the visible page, moves it to Trash, waits, and repeats. Messages stay in Trash for 30 days. Fast mode waits 5 seconds. Slow mode waits a random 10 to 15 seconds, and also pauses 0 to 3 seconds before selecting the page, which is easier on Gmail when it starts returning errors.
 
 The panel, the name, and the messages follow the browser language: Italian when the browser is in Italian, English otherwise. Gmail's own buttons are looked up in both Italian and English.
 
@@ -25,7 +25,7 @@ It will not start if the search contains any of these operators: `in:trash`, `in
 ## Limits
 
 - It only runs on `https://mail.google.com/`.
-- Each cycle takes only the visible page, about 50 rows, then waits 5 seconds.
+- Each cycle takes only the visible page, about 50 rows, then waits 5 seconds in fast mode. In slow mode the pause is a random 10 to 15 seconds, and selecting the page waits a random 0 to 3 seconds.
 - It finds the trash control by the name **Delete** or **Elimina**, not by the icon's position.
 - It stops on its own when the list stays empty. The panel says **Done. No rows left.** In Italian: **Finito. Nessuna riga rimasta.**
 - If a click has no effect, it retries up to three times and then stops.

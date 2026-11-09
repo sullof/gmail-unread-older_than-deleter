@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Gmail cestino non lette",
+  "version": "1.0.0",
+  "description": "Sulla ricerca Gmail aperta, seleziona la pagina visibile e la sposta nel Cestino, poi ripete.",
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

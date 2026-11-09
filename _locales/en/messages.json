@@ -1,0 +1,175 @@
+{
+  "extName": {
+    "message": "Gmail unread trash"
+  },
+  "extDescription": {
+    "message": "On the open Gmail search, selects the visible page, moves it to Trash, then repeats."
+  },
+  "checkingSearch": {
+    "message": "Checking the open search…"
+  },
+  "dangerousView": {
+    "message": "This view is left alone (Trash, Spam, Sent, Drafts, or Starred)."
+  },
+  "needSearch": {
+    "message": "Open a search first: the address must contain #search/."
+  },
+  "missingUnread": {
+    "message": "The search is missing is:unread."
+  },
+  "needOlderThan": {
+    "message": "The search needs older_than: of at least 90 days."
+  },
+  "blockedToken": {
+    "message": "The search contains $TOKEN$, so it will not start.",
+    "placeholders": {
+      "token": {
+        "content": "$1"
+      }
+    }
+  },
+  "queryMismatch": {
+    "message": "The search box does not match a safe search. Press Enter on the search, then Start."
+  },
+  "pausedHidden": {
+    "message": "Paused until this tab is visible."
+  },
+  "stoppedAfterTries": {
+    "message": "$REASON$ Stopped after $COUNT$ tries.",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      },
+      "count": {
+        "content": "$2"
+      }
+    }
+  },
+  "retrying": {
+    "message": "$REASON$ Retrying ($CURRENT$/$MAX$).",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      },
+      "current": {
+        "content": "$2"
+      },
+      "max": {
+        "content": "$3"
+      }
+    }
+  },
+  "stoppedBecause": {
+    "message": "Stopped: $REASON$",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      }
+    }
+  },
+  "dialogOpen": {
+    "message": "Stopped: a dialog is open. Close it, check Gmail, then press Start."
+  },
+  "lookingForRows": {
+    "message": "Looking for rows in the list…"
+  },
+  "finished": {
+    "message": "Done. No rows left. Batches: $BATCHES$, about $ROWS$ rows.",
+    "placeholders": {
+      "batches": {
+        "content": "$1"
+      },
+      "rows": {
+        "content": "$2"
+      }
+    }
+  },
+  "waitingForList": {
+    "message": "Waiting for the list to update…"
+  },
+  "selectingRows": {
+    "message": "Selecting $COUNT$ rows on this page…",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "cannotSelect": {
+    "message": "Cannot select the page."
+  },
+  "dialogBeforeDelete": {
+    "message": "Stopped: a dialog appeared. Delete was not pressed."
+  },
+  "noDeleteButton": {
+    "message": "The Delete button did not appear."
+  },
+  "trashing": {
+    "message": "Moving $COUNT$ rows to Trash…",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "waitingFive": {
+    "message": "Waiting 5 seconds…"
+  },
+  "listUnchanged": {
+    "message": "The list did not change: Gmail may have ignored the click."
+  },
+  "confirm": {
+    "message": "Moving one page of this search to Trash every 5 seconds.\n\n$QUERY$\n\nMessages stay in Trash for 30 days. You can press Stop whenever you want.",
+    "placeholders": {
+      "query": {
+        "content": "$1"
+      }
+    }
+  },
+  "started": {
+    "message": "Started."
+  },
+  "stoppedManual": {
+    "message": "Stopped. What is already in Trash stays there for 30 days."
+  },
+  "counts": {
+    "message": "Batches $BATCHES$ · rows $ROWS$",
+    "placeholders": {
+      "batches": {
+        "content": "$1"
+      },
+      "rows": {
+        "content": "$2"
+      }
+    }
+  },
+  "pillRunning": {
+    "message": "Trash · $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pillIdle": {
+    "message": "Trash"
+  },
+  "title": {
+    "message": "Unread trash"
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "start": {
+    "message": "Start"
+  },
+  "stop": {
+    "message": "Stop"
+  },
+  "note": {
+    "message": "One page at a time, then 5 seconds. Mail goes to Trash and is not deleted forever. Keep this tab visible."
+  },
+  "ready": {
+    "message": "Ready. Press Start: each cycle selects the page and moves it to Trash."
+  }
+}

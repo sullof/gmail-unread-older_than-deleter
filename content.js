@@ -6,6 +6,11 @@
   if (globalThis.__gmailCestino) return;
   globalThis.__gmailCestino = true;
 
+  function t(key, substitutions) {
+    const message = chrome.i18n.getMessage(key, substitutions || []);
+    return message || key;
+  }
+
   const PAUSE_MS = 5000;
   const MAX_MISSES = 3;
   const BLOCKED_TOKENS = [
@@ -22,7 +27,7 @@
     running: false,
     collapsed: false,
     stickyStatus: false,
-    status: "Controllo la ricerca aperta…",
+    status: t("checkingSearch"),
     query: "",
     batches: 0,
     rows: 0,
@@ -74,22 +79,14 @@
   }
 
   function blockReason() {
-    if (dangerousView()) {
-      return "Questa vista non la tocco (cestino, spam, inviati, bozze o speciali).";
-    }
-    if (!location.hash.toLowerCase().includes("#search/")) {
-      return "Apri la ricerca: l'indirizzo deve contenere #search/.";
-    }
+    if (dangerousView()) return t("dangerousView");
+    if (!location.hash.toLowerCase().includes("#search/")) return t("needSearch");
     const query = queryFromHash();
     const tokens = tokensOf(query);
-    if (!tokens.includes("is:unread") || tokens.includes("-is:unread")) {
-      return "Nella ricerca manca is:unread.";
-    }
-    if (olderThanDays(tokens) < 90) {
-      return "Nella ricerca serve older_than: di almeno 90 giorni.";
-    }
+    if (!tokens.includes("is:unread") || tokens.includes("-is:unread")) return t("missingUnread");
+    if (olderThanDays(tokens) < 90) return t("needOlderThan");
     const blocked = BLOCKED_TOKENS.find((token) => tokens.includes(token));
-    if (blocked) return `Nella ricerca c'è ${blocked}, quindi non parto.`;
+    if (blocked) return t("blockedToken", [blocked]);
     const typed = inputQuery();
     if (typed && typed !== query) {
       const typedTokens = tokensOf(typed);
@@ -100,7 +97,7 @@
         olderThanDays(typedTokens) < 90 ||
         typedBlocked
       ) {
-        return "La casella di ricerca non coincide con una ricerca sicura. Premi Invio sulla ricerca, poi Avvia.";
+        return t("queryMismatch");
       }
     }
     return "";
@@ -289,7 +286,7 @@
 
   async function waitWhileHidden(gen) {
     while (alive(gen) && document.hidden) {
-      state.status = "In pausa finché questa scheda non è visibile.";
+      state.status = t("pausedHidden");
       render();
       await sleep(500, gen);
     }
@@ -351,13 +348,14 @@
     render();
   }
 
-  function miss(gen, message) {
+  function miss(gen, reasonKey) {
     state.misses += 1;
+    const reason = t(reasonKey);
     if (state.misses >= MAX_MISSES) {
-      finish(`${message} Mi sono fermato dopo ${MAX_MISSES} tentativi.`);
+      finish(t("stoppedAfterTries", [reason, String(MAX_MISSES)]));
       return false;
     }
-    state.status = `${message} Riprovo (${state.misses}/${MAX_MISSES}).`;
+    state.status = t("retrying", [reason, String(state.misses), String(MAX_MISSES)]);
     render();
     console.info("[gmail-cestino]", state.status);
     return alive(gen);
@@ -372,25 +370,25 @@
       const reason = blockReason();
       state.query = queryFromHash();
       if (reason) {
-        finish(`Fermato: ${reason}`);
+        finish(t("stoppedBecause", [reason]));
         return;
       }
       if (dialogOpen()) {
-        finish("Fermato: c'è una finestra aperta. Chiudila, controlla Gmail, poi premi Avvia.");
+        finish(t("dialogOpen"));
         return;
       }
 
-      state.status = "Cerco le righe in elenco…";
+      state.status = t("lookingForRows");
       render();
       const rows = findRows();
       if (!rows.length) {
         emptyPasses += 1;
         const limit = isLoading() ? 20 : 8;
         if ((listLooksEmpty() && emptyPasses >= 2) || emptyPasses >= limit) {
-          finish(`Finito. Nessuna riga rimasta. Blocchi: ${state.batches}, righe circa ${state.rows}.`);
+          finish(t("finished", [String(state.batches), String(state.rows)]));
           return;
         }
-        state.status = "Attendo che l'elenco si aggiorni…";
+        state.status = t("waitingForList");
         render();
         await sleep(1000, gen);
         continue;
@@ -398,12 +396,12 @@
       emptyPasses = 0;
 
       const before = signature(rows);
-      state.status = `Seleziono ${rows.length} righe in questa pagina…`;
+      state.status = t("selectingRows", [String(rows.length)]);
       render();
       const selected = await selectPage(gen);
       if (!alive(gen)) return;
       if (!selected) {
-        if (!miss(gen, "Non riesco a selezionare la pagina.")) return;
+        if (!miss(gen, "cannotSelect")) return;
         await sleep(PAUSE_MS, gen);
         continue;
       }
@@ -411,25 +409,25 @@
       await sleep(400, gen);
       if (!alive(gen)) return;
       if (dialogOpen()) {
-        finish("Fermato: è comparsa una finestra. Non ho premuto Elimina.");
+        finish(t("dialogBeforeDelete"));
         return;
       }
 
       const trash = findDeleteButton();
       const selectedNow = countCheckedRows();
       if (!trash || selectedNow === 0) {
-        if (!miss(gen, "Il pulsante Elimina non è comparso.")) return;
+        if (!miss(gen, "noDeleteButton")) return;
         await sleep(PAUSE_MS, gen);
         continue;
       }
 
-      state.status = `Sposto nel Cestino ${selectedNow} righe…`;
+      state.status = t("trashing", [String(selectedNow)]);
       render();
       console.info("[gmail-cestino]", state.status, state.query);
       realClick(trash);
       state.batches += 1;
       state.rows += selectedNow;
-      state.status = "Attendo 5 secondi…";
+      state.status = t("waitingFive");
       render();
       await sleep(PAUSE_MS, gen);
       if (!alive(gen)) return;
@@ -439,7 +437,7 @@
       if (outcome === "same") {
         state.batches = Math.max(0, state.batches - 1);
         state.rows = Math.max(0, state.rows - selectedNow);
-        if (!miss(gen, "La lista non è cambiata: Gmail potrebbe aver ignorato il clic.")) return;
+        if (!miss(gen, "listUnchanged")) return;
         continue;
       }
       state.misses = 0;
@@ -456,11 +454,7 @@
       render();
       return;
     }
-    const accepted = confirm(
-      "Sposto nel Cestino una pagina di questa ricerca ogni 5 secondi.\n\n" +
-        state.query +
-        "\n\nI messaggi restano nel Cestino per 30 giorni. Puoi premere Stop quando vuoi.",
-    );
+    const accepted = confirm(t("confirm", [state.query]));
     if (!accepted) return;
 
     state.running = true;
@@ -468,7 +462,7 @@
     state.misses = 0;
     state.batches = 0;
     state.rows = 0;
-    state.status = "Partito.";
+    state.status = t("started");
     const gen = ++generation;
     render();
     void loop(gen);
@@ -476,7 +470,7 @@
 
   function onStop() {
     if (!state.running) return;
-    finish("Fermato. Quello che è già nel Cestino resta lì per 30 giorni.");
+    finish(t("stoppedManual"));
   }
 
   function render() {
@@ -488,10 +482,10 @@
     ui.pill.hidden = !state.collapsed;
     ui.query.textContent = state.query || "—";
     ui.status.textContent = state.status;
-    ui.counts.textContent = `Blocchi ${state.batches} · righe ${state.rows}`;
+    ui.counts.textContent = t("counts", [String(state.batches), String(state.rows)]);
     ui.start.disabled = state.running || !safe;
     ui.stop.disabled = !state.running;
-    ui.pill.textContent = state.running ? `Cestino · ${state.rows}` : "Cestino";
+    ui.pill.textContent = state.running ? t("pillRunning", [String(state.rows)]) : t("pillIdle");
   }
 
   function mount() {
@@ -564,19 +558,19 @@
       </style>
       <div class="panel" id="panel">
         <div class="head">
-          <h2>Cestino non lette</h2>
-          <button class="link" id="hide" type="button">Nascondi</button>
+          <h2 id="title"></h2>
+          <button class="link" id="hide" type="button"></button>
         </div>
         <div class="query" id="query"></div>
         <div class="status" id="status"></div>
         <div class="counts" id="counts"></div>
         <div class="actions">
-          <button class="start" id="start" type="button">Avvia</button>
-          <button class="stop" id="stop" type="button">Stop</button>
+          <button class="start" id="start" type="button"></button>
+          <button class="stop" id="stop" type="button"></button>
         </div>
-        <p class="note">Una pagina alla volta, poi 5 secondi. Va nel Cestino, non viene cancellata per sempre. Tieni questa scheda visibile.</p>
+        <p class="note" id="note"></p>
       </div>
-      <button class="pill" id="pill" type="button" hidden>Cestino</button>
+      <button class="pill" id="pill" type="button" hidden></button>
     `;
     document.documentElement.appendChild(host);
 
@@ -587,6 +581,11 @@
     ui.counts = shadow.getElementById("counts");
     ui.start = shadow.getElementById("start");
     ui.stop = shadow.getElementById("stop");
+    shadow.getElementById("title").textContent = t("title");
+    shadow.getElementById("hide").textContent = t("hide");
+    shadow.getElementById("note").textContent = t("note");
+    ui.start.textContent = t("start");
+    ui.stop.textContent = t("stop");
     shadow.getElementById("start").addEventListener("click", onStart);
     shadow.getElementById("stop").addEventListener("click", onStop);
     shadow.getElementById("hide").addEventListener("click", () => {
@@ -604,7 +603,7 @@
     if (!document.getElementById("gmail-cestino-host")) mount();
     if (!state.running && !state.stickyStatus) {
       const reason = blockReason();
-      state.status = reason || "Pronto. Premi Avvia: ogni ciclo seleziona la pagina e la sposta nel Cestino.";
+      state.status = reason || t("ready");
     }
     render();
   }

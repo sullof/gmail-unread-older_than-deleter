@@ -1,0 +1,175 @@
+{
+  "extName": {
+    "message": "Gmail cestino non lette"
+  },
+  "extDescription": {
+    "message": "Sulla ricerca Gmail aperta, seleziona la pagina visibile e la sposta nel Cestino, poi ripete."
+  },
+  "checkingSearch": {
+    "message": "Controllo la ricerca aperta…"
+  },
+  "dangerousView": {
+    "message": "Questa vista non la tocco (cestino, spam, inviati, bozze o speciali)."
+  },
+  "needSearch": {
+    "message": "Apri la ricerca: l'indirizzo deve contenere #search/."
+  },
+  "missingUnread": {
+    "message": "Nella ricerca manca is:unread."
+  },
+  "needOlderThan": {
+    "message": "Nella ricerca serve older_than: di almeno 90 giorni."
+  },
+  "blockedToken": {
+    "message": "Nella ricerca c'è $TOKEN$, quindi non parto.",
+    "placeholders": {
+      "token": {
+        "content": "$1"
+      }
+    }
+  },
+  "queryMismatch": {
+    "message": "La casella di ricerca non coincide con una ricerca sicura. Premi Invio sulla ricerca, poi Avvia."
+  },
+  "pausedHidden": {
+    "message": "In pausa finché questa scheda non è visibile."
+  },
+  "stoppedAfterTries": {
+    "message": "$REASON$ Mi sono fermato dopo $COUNT$ tentativi.",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      },
+      "count": {
+        "content": "$2"
+      }
+    }
+  },
+  "retrying": {
+    "message": "$REASON$ Riprovo ($CURRENT$/$MAX$).",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      },
+      "current": {
+        "content": "$2"
+      },
+      "max": {
+        "content": "$3"
+      }
+    }
+  },
+  "stoppedBecause": {
+    "message": "Fermato: $REASON$",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      }
+    }
+  },
+  "dialogOpen": {
+    "message": "Fermato: c'è una finestra aperta. Chiudila, controlla Gmail, poi premi Avvia."
+  },
+  "lookingForRows": {
+    "message": "Cerco le righe in elenco…"
+  },
+  "finished": {
+    "message": "Finito. Nessuna riga rimasta. Blocchi: $BATCHES$, righe circa $ROWS$.",
+    "placeholders": {
+      "batches": {
+        "content": "$1"
+      },
+      "rows": {
+        "content": "$2"
+      }
+    }
+  },
+  "waitingForList": {
+    "message": "Attendo che l'elenco si aggiorni…"
+  },
+  "selectingRows": {
+    "message": "Seleziono $COUNT$ righe in questa pagina…",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "cannotSelect": {
+    "message": "Non riesco a selezionare la pagina."
+  },
+  "dialogBeforeDelete": {
+    "message": "Fermato: è comparsa una finestra. Non ho premuto Elimina."
+  },
+  "noDeleteButton": {
+    "message": "Il pulsante Elimina non è comparso."
+  },
+  "trashing": {
+    "message": "Sposto nel Cestino $COUNT$ righe…",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "waitingFive": {
+    "message": "Attendo 5 secondi…"
+  },
+  "listUnchanged": {
+    "message": "La lista non è cambiata: Gmail potrebbe aver ignorato il clic."
+  },
+  "confirm": {
+    "message": "Sposto nel Cestino una pagina di questa ricerca ogni 5 secondi.\n\n$QUERY$\n\nI messaggi restano nel Cestino per 30 giorni. Puoi premere Stop quando vuoi.",
+    "placeholders": {
+      "query": {
+        "content": "$1"
+      }
+    }
+  },
+  "started": {
+    "message": "Partito."
+  },
+  "stoppedManual": {
+    "message": "Fermato. Quello che è già nel Cestino resta lì per 30 giorni."
+  },
+  "counts": {
+    "message": "Blocchi $BATCHES$ · righe $ROWS$",
+    "placeholders": {
+      "batches": {
+        "content": "$1"
+      },
+      "rows": {
+        "content": "$2"
+      }
+    }
+  },
+  "pillRunning": {
+    "message": "Cestino · $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pillIdle": {
+    "message": "Cestino"
+  },
+  "title": {
+    "message": "Cestino non lette"
+  },
+  "hide": {
+    "message": "Nascondi"
+  },
+  "start": {
+    "message": "Avvia"
+  },
+  "stop": {
+    "message": "Stop"
+  },
+  "note": {
+    "message": "Una pagina alla volta, poi 5 secondi. Va nel Cestino, non viene cancellata per sempre. Tieni questa scheda visibile."
+  },
+  "ready": {
+    "message": "Pronto. Premi Avvia: ogni ciclo seleziona la pagina e la sposta nel Cestino."
+  }
+}

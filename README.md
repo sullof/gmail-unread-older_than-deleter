@@ -43,3 +43,11 @@ It will not start if the search contains any of these operators: `in:trash`, `in
 Chrome warns that the extension can read and change data on `mail.google.com`: that is the permission the script needs to run inside Gmail. After a code change, click **Reload** on the extension in `chrome://extensions` and refresh the Gmail tab.
 
 The same install works in Edge, Brave, and other Chromium browsers, from their extensions page.
+
+## License
+
+Released under the [MIT License](LICENSE).
+
+This extension was tried only on a few setups. It may have bugs and it may not behave as you expect. Use it at your own risk. The author takes no responsibility if it does not work as intended.
+
+Copyright (c) 2026 Francesco Sullo

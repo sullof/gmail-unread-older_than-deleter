@@ -43,3 +43,11 @@ Non parte se nella ricerca compare uno di questi operatori: `in:trash`, `in:spam
 Chrome avvisa che l'estensione può leggere e modificare i dati su `mail.google.com`: è il permesso con cui lo script gira dentro Gmail. Dopo una modifica al codice, in `chrome://extensions` premi **Ricarica** sull'estensione e aggiorna la scheda di Gmail.
 
 Lo stesso caricamento vale per Edge, Brave e gli altri browser Chromium, dalla loro pagina delle estensioni.
+
+## Licenza
+
+Rilasciata sotto [licenza MIT](LICENSE).
+
+L'estensione è stata provata solo con alcune configurazioni. Può avere bachi e può non funzionare come ti aspetti. La usi a tuo rischio. L'autore non si assume alcuna responsabilità se non funziona come previsto.
+
+Copyright (c) 2026 Francesco Sullo

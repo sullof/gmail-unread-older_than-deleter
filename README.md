@@ -1,43 +1,45 @@
-# gmail-unread-older_tan-deleter
+# gmail-unread-older_than-deleter
 
-Estensione per Chrome che, sulla ricerca Gmail già aperta, seleziona la pagina visibile, la sposta nel Cestino, aspetta cinque secondi e ripete. I messaggi restano nel Cestino per 30 giorni.
+[Clicca qui per il README In italiano](README.it.md)
 
-Il pannello, il nome e i messaggi seguono la lingua del browser: italiano se il browser è in italiano, inglese negli altri casi. I pulsanti di Gmail vengono cercati sia in italiano sia in inglese.
+Chrome extension that, on an already open Gmail search, selects the visible page, moves it to Trash, waits five seconds, and repeats. Messages stay in Trash for 30 days.
 
-## Requisiti della ricerca
+The panel, the name, and the messages follow the browser language: Italian when the browser is in Italian, English otherwise. Gmail's own buttons are looked up in both Italian and English.
 
-Il pulsante **Avvia** resta disattivato finché l'indirizzo non è una ricerca (`#search/`) che contiene tutte e due queste condizioni:
+## Search requirements
+
+The **Start** button stays disabled until the address is a search (`#search/`) that contains both of these:
 
 - `is:unread`
-- `older_than:` di almeno 90 giorni (`90d`, `3m`, `1y`; un mese vale 30 giorni, un anno 365)
+- `older_than:` of at least 90 days (`90d`, `3m`, `1y`; a month counts as 30 days, a year as 365)
 
-Il resto della query può cambiare. Per esempio:
+The rest of the query can change. For example:
 
 ```text
 is:unread older_than:90d in:forums
 is:unread older_than:1y from:linkedin.com
 ```
 
-Non parte se nella ricerca compare uno di questi operatori: `in:trash`, `in:spam`, `in:sent`, `in:draft`, `in:drafts`, `is:starred`, `is:important`. Non parte nemmeno dalle viste Cestino, Spam, Posta inviata, Bozze, Speciali o Importanti. Se la casella di ricerca è stata modificata e non coincide con l'indirizzo, va premuto Invio prima di avviare.
+It will not start if the search contains any of these operators: `in:trash`, `in:spam`, `in:sent`, `in:draft`, `in:drafts`, `is:starred`, `is:important`. It will not start from Trash, Spam, Sent, Drafts, Starred, or Important either. If the search box was edited and no longer matches the address, press Enter before starting.
 
-## Limiti
+## Limits
 
-- Agisce solo su `https://mail.google.com/`.
-- Ogni ciclo prende solo la pagina visibile, circa 50 righe, poi attende 5 secondi.
-- Riconosce il cestino dal nome **Delete** o **Elimina**, non dalla posizione dell'icona.
-- Si ferma da solo quando l'elenco resta vuoto. Il pannello dice **Finito. Nessuna riga rimasta.** In inglese: **Done. No rows left.**
-- Se un clic non ha effetto, riprova fino a tre volte e poi si ferma.
-- Va in pausa se la scheda non è visibile. Continua se Gmail è la scheda davanti di una finestra aperta sullo schermo, anche mentre si lavora altrove. Si ferma se quella finestra è minimizzata, coperta del tutto o su uno spazio di macOS non visibile.
-- Una sola finestra di Gmail. Più schede nella stessa finestra non lavorano insieme: quella dietro è in pausa.
+- It only runs on `https://mail.google.com/`.
+- Each cycle takes only the visible page, about 50 rows, then waits 5 seconds.
+- It finds the trash control by the name **Delete** or **Elimina**, not by the icon's position.
+- It stops on its own when the list stays empty. The panel says **Done. No rows left.** In Italian: **Finito. Nessuna riga rimasta.**
+- If a click has no effect, it retries up to three times and then stops.
+- It pauses when the tab is not visible. It keeps going when Gmail is the front tab of a window that stays open on screen, even while you work elsewhere. It stops if that window is minimized, fully covered, or on a macOS Space that is not visible.
+- One Gmail window. Several tabs in the same window do not work together: the one behind is paused.
 
-## Installazione
+## Installation
 
-1. Apri `chrome://extensions`.
-2. Attiva la **modalità sviluppatore**.
-3. Clicca **Carica estensione non pacchettizzata** e scegli questa cartella.
-4. Ricarica Gmail. Il pannello compare in basso a destra.
-5. Apri una ricerca che rispetta i requisiti sopra e premi **Avvia**.
+1. Open `chrome://extensions`.
+2. Turn on **Developer mode**.
+3. Click **Load unpacked** and choose this folder.
+4. Reload Gmail. The panel appears at the bottom right.
+5. Open a search that meets the requirements above and press **Start**.
 
-Chrome avvisa che l'estensione può leggere e modificare i dati su `mail.google.com`: è il permesso con cui lo script gira dentro Gmail. Dopo una modifica al codice, in `chrome://extensions` premi **Ricarica** sull'estensione e aggiorna la scheda di Gmail.
+Chrome warns that the extension can read and change data on `mail.google.com`: that is the permission the script needs to run inside Gmail. After a code change, click **Reload** on the extension in `chrome://extensions` and refresh the Gmail tab.
 
-Lo stesso caricamento vale per Edge, Brave e gli altri browser Chromium, dalla loro pagina delle estensioni.
+The same install works in Edge, Brave, and other Chromium browsers, from their extensions page.

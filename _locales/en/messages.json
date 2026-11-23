@@ -113,7 +113,7 @@
     }
   },
   "waiting": {
-    "message": "Waiting $SECONDS$ seconds…",
+    "message": "Waiting $SECONDS$…",
     "placeholders": {
       "seconds": {
         "content": "$1"
@@ -127,7 +127,7 @@
     "message": "Slow · 10–15 s"
   },
   "hesitating": {
-    "message": "Waiting $SECONDS$ seconds before deleting…",
+    "message": "Waiting $SECONDS$ before deleting…",
     "placeholders": {
       "seconds": {
         "content": "$1"

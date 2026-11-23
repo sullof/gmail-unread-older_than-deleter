@@ -2,7 +2,7 @@
 
 [English README](README.md)
 
-Estensione per Chrome che, sulla ricerca Gmail già aperta, seleziona la pagina visibile, la sposta nel Cestino, aspetta e ripete. I messaggi restano nel Cestino per 30 giorni. La modalità veloce aspetta 5 secondi. La modalità lenta aspetta un tempo casuale fra 10 e 15 secondi perché compaiano i risultati successivi, seleziona subito la pagina e aspetta fra 1 e 2 secondi prima del Cestino. È più gentile con Gmail quando inizia a rispondere con errori.
+Estensione per Chrome che, sulla ricerca Gmail già aperta, seleziona la pagina visibile, la sposta nel Cestino, aspetta e ripete. I messaggi restano nel Cestino per 30 giorni. La modalità veloce aspetta 5 secondi. La modalità lenta aspetta un tempo casuale fra 10 e 15 secondi, al millisecondo, perché compaiano i risultati successivi, seleziona subito la pagina e aspetta fra 1 e 3 secondi, sempre al millisecondo, prima del Cestino. È più gentile con Gmail quando inizia a rispondere con errori.
 
 Il pannello e i messaggi seguono la lingua del browser: italiano se il browser è in italiano, inglese negli altri casi. Il nome resta **GUOD** in entrambe. Quando il pannello è ridotto, il pulsante dice **GUOD**. I pulsanti di Gmail vengono cercati sia in italiano sia in inglese.
 
@@ -25,7 +25,7 @@ Non parte se nella ricerca compare uno di questi operatori: `in:trash`, `in:spam
 ## Limiti
 
 - Agisce solo su `https://mail.google.com/`.
-- Ogni ciclo prende solo la pagina visibile, circa 50 righe, poi attende 5 secondi in modalità veloce. In modalità lenta aspetta un tempo casuale fra 10 e 15 secondi per i risultati nuovi, seleziona subito e attende fra 1 e 2 secondi prima del Cestino.
+- Ogni ciclo prende solo la pagina visibile, circa 50 righe, poi attende 5 secondi in modalità veloce. In modalità lenta aspetta un tempo casuale fra 10 e 15 secondi, al millisecondo, per i risultati nuovi, seleziona subito e attende fra 1 e 3 secondi, sempre al millisecondo, prima del Cestino.
 - Riconosce il cestino dal nome **Delete** o **Elimina**, non dalla posizione dell'icona.
 - Si ferma da solo quando l'elenco resta vuoto. Il pannello dice **Finito. Nessuna riga rimasta.** In inglese: **Done. No rows left.**
 - Se un clic non ha effetto, riprova fino a tre volte e poi si ferma.

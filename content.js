@@ -36,17 +36,27 @@
     pace: "fast",
   };
 
-  function randomInt(min, max) {
-    return min + Math.floor(Math.random() * (max - min + 1));
+  function randomMs(minMs, maxMs) {
+    let ms;
+    do {
+      ms = minMs + Math.floor(Math.random() * (maxMs - minMs + 1));
+    } while (ms % 1000 === 0);
+    return ms;
+  }
+
+  function formatDelay(ms) {
+    const seconds = Math.floor(ms / 1000);
+    const millis = String(ms % 1000).padStart(3, "0");
+    return seconds + "s " + millis + "ms";
   }
 
   function pauseMs() {
-    if (state.pace === "slow") return randomInt(10, 15) * 1000;
+    if (state.pace === "slow") return randomMs(10000, 15000);
     return FAST_PAUSE_MS;
   }
 
   function deleteDelayMs() {
-    if (state.pace === "slow") return randomInt(1, 2) * 1000;
+    if (state.pace === "slow") return randomMs(1000, 3000);
     return 400;
   }
 
@@ -430,7 +440,7 @@
 
       const beforeDelete = deleteDelayMs();
       if (state.pace === "slow") {
-        state.status = t("hesitating", [String(beforeDelete / 1000)]);
+        state.status = t("hesitating", [formatDelay(beforeDelete)]);
         render();
       }
       await sleep(beforeDelete, gen);
@@ -455,7 +465,7 @@
       state.batches += 1;
       state.rows += selectedNow;
       const pause = pauseMs();
-      state.status = t("waiting", [String(pause / 1000)]);
+      state.status = t("waiting", [state.pace === "slow" ? formatDelay(pause) : "5s"]);
       render();
       await sleep(pause, gen);
       if (!alive(gen)) return;

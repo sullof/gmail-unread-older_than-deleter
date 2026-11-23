@@ -45,9 +45,9 @@
     return FAST_PAUSE_MS;
   }
 
-  function selectionDelayMs() {
-    if (state.pace !== "slow") return 0;
-    return randomInt(0, 3) * 1000;
+  function deleteDelayMs() {
+    if (state.pace === "slow") return randomInt(1, 2) * 1000;
+    return 400;
   }
 
   function pauseLabel() {
@@ -415,13 +415,6 @@
       }
       emptyPasses = 0;
 
-      const hesitate = selectionDelayMs();
-      if (hesitate > 0) {
-        state.status = t("hesitating", [String(hesitate / 1000)]);
-        render();
-        await sleep(hesitate, gen);
-        if (!alive(gen)) return;
-      }
       const currentRows = findRows();
       if (!currentRows.length) continue;
       const before = signature(currentRows);
@@ -435,7 +428,12 @@
         continue;
       }
 
-      await sleep(400, gen);
+      const beforeDelete = deleteDelayMs();
+      if (state.pace === "slow") {
+        state.status = t("hesitating", [String(beforeDelete / 1000)]);
+        render();
+      }
+      await sleep(beforeDelete, gen);
       if (!alive(gen)) return;
       if (dialogOpen()) {
         finish(t("dialogBeforeDelete"));

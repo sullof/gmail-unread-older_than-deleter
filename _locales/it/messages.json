@@ -127,7 +127,7 @@
     "message": "Lento · 10–15 s"
   },
   "hesitating": {
-    "message": "Attendo $SECONDS$ secondi prima di selezionare…",
+    "message": "Attendo $SECONDS$ secondi prima di cancellare…",
     "placeholders": {
       "seconds": {
         "content": "$1"

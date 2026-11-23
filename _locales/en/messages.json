@@ -127,7 +127,7 @@
     "message": "Slow · 10–15 s"
   },
   "hesitating": {
-    "message": "Waiting $SECONDS$ seconds before selecting…",
+    "message": "Waiting $SECONDS$ seconds before deleting…",
     "placeholders": {
       "seconds": {
         "content": "$1"
